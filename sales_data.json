@@ -1,0 +1,16 @@
+{
+    "sales": [
+    {
+        "product": "Laptops",
+        "total_amount": 3300
+    },
+    {
+        "product": "Software",
+        "total_amount": 200
+    },
+    {
+        "product": "Subscriptions",
+        "total_amount": 1000
+    }
+    ]
+}
