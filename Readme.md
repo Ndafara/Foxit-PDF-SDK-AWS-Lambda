@@ -11,4 +11,4 @@ This repo demonstrates how to generate PDFs with the `Foxit` SDK with Python.
 The code is AWS Lambda Functions, 
 
 ### Executing
-The code is AWS Lambda Functions, so you will have to create test event to invoke them.
+The code is AWS Lambda Functions, so you will have to create a test event to invoke them.
