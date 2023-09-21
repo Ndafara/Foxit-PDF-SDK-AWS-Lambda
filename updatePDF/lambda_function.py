@@ -10,7 +10,7 @@ def lambda_handler(event, context):
 
     fsdk.Library_Initialize(sn, key)
 
-    # s3 bucket and object details
+    # S3 bucket and object details
     s3_bucket_name = "foxit-lambda-demo"
     s3_key = "lambda_doc.pdf"
     s3_updated_key = "lambda_doc_updated.pdf"
@@ -38,26 +38,25 @@ def lambda_handler(event, context):
     page = document.GetPage(0)
     page.StartParse(fsdk.PDFPage.e_ParsePageNormal, None, False)
 
-    # Set the Style
+    # Set the style
     richtext_style = RichTextStyle()
     richtext_style.font = Font("Times New Roman", 0, Font.e_CharsetANSI, 0)
-    richtext_style.text_color = 0x000000  # Black Color
+    richtext_style.text_color = 0x000000  # Black color
     richtext_style.text_size = 10
 
-    # Update the PDF with Text
+    # Update the PDF with text
     first_line = page.AddText("This line was added to the original PDF", RectF(1, 750, 200, 770), richtext_style)
 
-    second_line = page.AddText("This is the second line added to the original PDF", RectF(1, 720, 200, 760),
-                               richtext_style)
+    second_line = page.AddText("This is the second line added to the original PDF", RectF(1, 720, 200, 760), richtext_style)
 
-    # Generate the content on the PDF
+    # Generate the content of the PDF
     page.GenerateContent()
 
     # Save the PDF to a local temporary file
     pdf_filename_local = "/tmp/local_pdf.pdf"
     document.SaveAs(pdf_filename_local, fsdk.PDFDoc.e_SaveFlagIncremental)
 
-    # Upload the Updated PDF to S3
+    # Upload the updated PDF to S3
 
     s3.upload_file(pdf_filename_local, s3_bucket_name, s3_updated_key)
 
