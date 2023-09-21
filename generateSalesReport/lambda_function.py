@@ -14,19 +14,19 @@ def lambda_handler(event, context):
     # Get the date
     today = date.today()
 
-    # s3 bucket and object details
+    # S3 bucket and object details
     s3_bucket_name = "foxit-lambda-demo"
     s3_template_key = "Daily Sales Template.pdf"
     s3_sales_data_key = "sales_data.json"
     s3_sales_report_key = f"Sales_Reports/{today}.pdf"
 
-    # Download the Template PDF from S3
+    # Download the PDF template from S3
     s3 = boto3.client('s3')
     pdf_filename_template = "/tmp/template.pdf"
 
     s3.download_file(s3_bucket_name, s3_template_key, pdf_filename_template)
 
-    # Load the PDF Template
+    # Load the PDF template
     document = fsdk.PDFDoc(pdf_filename_template)
 
     # Load the PDF
@@ -43,19 +43,19 @@ def lambda_handler(event, context):
     page = document.GetPage(0)
     page.StartParse(fsdk.PDFPage.e_ParsePageNormal, None, False)
 
-    # Set the Style
+    # Set the style
     richtext_style = RichTextStyle()
     richtext_style.font = Font("Times New Roman", 0, Font.e_CharsetANSI, 0)
-    richtext_style.text_color = 0x000000  # Black Color
+    richtext_style.text_color = 0x000000  # Black color
     richtext_style.text_size = 15
 
-    # Process the Sales Data from the JSON File
+    # Process the sales data from the JSON file
     total_sales = 0
     products = []
 
     try:
         # Fetch the sales data
-        response = s3.get_object(Bucket=s3_bucket_name, Key=s3_sales_data_key)
+        response = s3.get_object(Bucket = s3_bucket_name, Key = s3_sales_data_key)
 
         # Deserialize the file's contents
         contents = response['Body'].read().decode()
@@ -71,18 +71,18 @@ def lambda_handler(event, context):
     except Exception as e:
         print(e)
 
-    # Update the PDF with the Data
+    # Update the PDF with the data
 
-    # Add date to the Report
+    # Add date to the report
     date_line = page.AddText(f"Date: {today}", RectF(1, 600, 350, 620), richtext_style)
 
-    # Add Products Sold
+    # Add products sold
     products_sold = page.AddText(f"Products Sold: {products}", RectF(1, 520, 400, 605), richtext_style)
 
-    # Add Total Sales
+    # Add total sales
     all_sales = page.AddText(f"The total sales were: {total_sales}", RectF(1, 490, 350, 590), richtext_style)
 
-    # Generate the content on the PDF
+    # Generate the content of the PDF
     page.GenerateContent()
 
     # Save the PDF to a local temporary file
@@ -91,7 +91,7 @@ def lambda_handler(event, context):
 
     s3.upload_file(pdf_filename_local, s3_bucket_name, s3_sales_report_key)
 
-    response = "Successfully generated a PDF Sales Report in S3 using the Foxit PDF SDK!'"
+    response = "Successfully generated a PDF Sales Report in S3 using the Foxit PDF SDK!"
 
     return {
         'statusCode': 200,
