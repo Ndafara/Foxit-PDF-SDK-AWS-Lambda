@@ -60,7 +60,7 @@ def lambda_handler(event, context):
 
     s3.upload_file(pdf_filename_local, s3_bucket_name, s3_updated_key)
 
-    response = "Successfully updated PDF in S3 using the Foxit PDF SDK!'"
+    response = "Successfully updated PDF in S3 using the Foxit PDF SDK!"
 
     return {
         'statusCode': 200,
