@@ -26,7 +26,7 @@ def lambda_handler(event, context):
     s3 = boto3.client("s3")
     s3.upload_file(pdf_filename, s3_bucket_name, s3_key)
 
-    response = "Successfully created PDF from Lambda to S3 using the Foxit PDF SDK!'"
+    response = "Successfully created PDF from Lambda to S3 using the Foxit PDF SDK!"
 
     return {
         'statusCode': 200,
